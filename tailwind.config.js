@@ -10,8 +10,8 @@ module.exports = {
         'sneaky': ['Robofan'],
       },
       colors: {
-        'sneaky': '#22c55e',
-        'sneaky-dark': '#0f9d58',
+        'sneaky': '#65bc47',
+        'sneaky-dark': '#0a9900',
         'sneaky-secondary': '#f5f5f5',
         'sneaky-secondary-dark': '#e5e5e5',
         'sneaky-background': colors.gray[700],
