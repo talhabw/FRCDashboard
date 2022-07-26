@@ -1,6 +1,7 @@
 [<img src="images/icon.png" align="right" width="150">](https://github.com/sneakysnakesfrc/sneaky-dashboard)
 # Sneaky Dashboard
-![Screenshot slideshow](images/screenshots.gif)
+[Go to web view](https://talhabw.github.io/Sneaky-Dashboard/src)
+<!-- ![Screenshot slideshow](images/screenshots.gif) -->
 
 ## Used NetworkTables Variables
 - `/SmartDashboard/drive/navx/yaw`
