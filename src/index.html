@@ -5,28 +5,183 @@
     <meta charset="utf-8">
     <title>FRC Dashboard</title>
     <link href="css/style.css" rel="stylesheet">
+    <link href="css/output.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-2.13.3.min.js"></script>
 </head>
 
-<body>
-    <div id="timer">2:15</div>
-    <header>
-        <!-- Tells whether robot is connected to dashboard. -->
-        <div id="robot-state">Unknown state</div>
-        <button id="connect-button">Connect</button>
+<body class="font-sneaky">
+    <!-- Robot Status and Match Time -->
+    <header class="container mx-auto my-2 py-6 flex text-5xl bg-sneaky-background">
+        <div class="w-1/2 text-center">
+            Robot Status: <span class="text-sneaky" id="robot-state">Unknown state</span>
+        </div>
+        <div class="w-1/2 text-center">
+            Match Time: <span class="text-sneaky" id="timer">00:00</span>
+        </div>
     </header>
-    <!-- You'll need to mess around with the CSS of #camera (found in css/style.css) to get it to work.
-        More explanation in that CSS rule. -->
-    <div id="camera"></div>
-    <!-- The main body of the dashboard, by default contains the gyro monitor and the robot diagram -->
+
+    <!-- Main Container -->
+    <section class="container mx-auto my-4 flex">
+        <div class="w-5/12">
+            <!-- Camera Feed -->
+            <div class="bg-sneaky-background p-4">
+                <div class="text-3xl mb-4">Camera Feed</div>
+                <div class="w-full h-full bg-sneaky-background-light overflow-hidden" id="camera">
+                    <div class="bg-cover bg-center w-full h-full" id="grid"></div>
+                </div>
+            </div>
+
+            <div class="mt-4 flex">
+                <!-- Circle Progress Bars -->
+                <div class="w-5/12 bg-sneaky-background flex flex-wrap">
+                    <!-- Battery Voltage -->
+                    <div class="w-1/2 p-4 bg-sneaky-background-light" id="batteryVoltage">
+                        <div class="text-xs mb-2">Battery Voltage</div>
+                        <div class="circle-wrap">
+                            <div class="circle">
+                                <div class="mask full">
+                                    <div class="fill"></div>
+                                </div>
+                                <div class="mask half">
+                                    <div class="fill"></div>
+                                </div>
+                                <div class="inside-circle">75%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- RIO CPU Usage -->
+                    <div class="w-1/2 p-4" id="cpuUsage">
+                        <div class="text-xs mb-2">RIO CPU Usage</div>
+                        <div class="circle-wrap">
+                            <div class="circle">
+                                <div class="mask full">
+                                    <div class="fill"></div>
+                                </div>
+                                <div class="mask half">
+                                    <div class="fill"></div>
+                                </div>
+                                <div class="inside-circle">75%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Power Draw -->
+                    <div class="w-1/2 p-4" id="powerDraw">
+                        <div class="text-xs mb-2">Power Draw</div>
+                        <div class="circle-wrap">
+                            <div class="circle">
+                                <div class="mask full">
+                                    <div class="fill"></div>
+                                </div>
+                                <div class="mask half">
+                                    <div class="fill"></div>
+                                </div>
+                                <div class="inside-circle">75%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- RIO RAM Usage -->
+                    <div class="w-1/2 p-4 bg-sneaky-background-light" id="ramUsage">
+                        <div class="text-xs mb-2">RIO RAM Usage</div>
+                        <div class="circle-wrap">
+                            <div class="circle">
+                                <div class="mask full">
+                                    <div class="fill"></div>
+                                </div>
+                                <div class="mask half">
+                                    <div class="fill"></div>
+                                </div>
+                                <div class="inside-circle">75%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Horizontal Progress Bars -->
+                <div class="w-7/12 bg-sneaky-background p-4 ml-2">
+                    <div class="text-s mb-4">Power Usage by Device</div>
+                    <!-- Front Left Wheel -->
+                    <div class="flex items-center mb-4">
+                        <div class="w-1/3 text-left text-xs">Front Left Wheel</div>
+                        <div class="w-2/3 h-4 bg-sneaky-secondary rounded-full">
+                            <div class="h-4 bg-sneaky rounded-full text-xs font-medium text-center text-sneaky-secondary p-0.5 leading-none"
+                                id="frontLeftWheelPU"></div>
+                        </div>
+                    </div>
+                    <!-- Front Right Wheel -->
+                    <div class="flex items-center mb-4">
+                        <div class="w-1/3 text-left text-xs">Front Right Wheel</div>
+                        <div class="w-2/3 h-4 bg-sneaky-secondary rounded-full">
+                            <div class="h-4 bg-sneaky rounded-full text-xs font-medium text-center text-sneaky-secondary p-0.5 leading-none"
+                                id="frontRightWheelPU"></div>
+                        </div>
+                    </div>
+                    <!-- Back Left Wheel -->
+                    <div class="flex items-center mb-4">
+                        <div class="w-1/3 text-left text-xs">Back Left Wheel</div>
+                        <div class="w-2/3 h-4 bg-sneaky-secondary rounded-full">
+                            <div class="h-4 bg-sneaky rounded-full text-xs font-medium text-center text-sneaky-secondary p-0.5 leading-none"
+                                id="backLeftWheelPU"></div>
+                        </div>
+                    </div>
+                    <!-- Back Right Wheel -->
+                    <div class="flex items-center mb-4">
+                        <div class="w-1/3 text-left text-xs">Back Right Wheel</div>
+                        <div class="w-2/3 h-4 bg-sneaky-secondary rounded-full">
+                            <div class="h-4 bg-sneaky rounded-full text-xs font-medium text-center text-sneaky-secondary p-0.5 leading-none"
+                                id="backRightWheelPU"></div>
+                        </div>
+                    </div>
+                    <!-- Climber Motor -->
+                    <div class="flex items-center mb-4">
+                        <div class="w-1/3 text-left text-xs">Climber Motor</div>
+                        <div class="w-2/3 h-4 bg-sneaky-secondary rounded-full">
+                            <div class="h-4 bg-sneaky rounded-full text-xs font-medium text-center text-sneaky-secondary p-0.5 leading-none"
+                                id="climberMotorPU"></div>
+                        </div>
+                    </div>
+                    <!-- RoboRIO -->
+                    <div class="flex items-center mb-4">
+                        <div class="w-1/3 text-left text-xs">RoboRIO</div>
+                        <div class="w-2/3 h-4 bg-sneaky-secondary rounded-full">
+                            <div class="h-4 bg-sneaky rounded-full text-xs font-medium text-center text-sneaky-secondary p-0.5 leading-none"
+                                id="roborioPU"></div>
+                        </div>
+                    </div>
+                    <!-- LimeLight -->
+                    <div class="flex items-center mb-4">
+                        <div class="w-1/3 text-left text-xs">LimeLight</div>
+                        <div class="w-2/3 h-4 bg-sneaky-secondary rounded-full">
+                            <div class="h-4 bg-sneaky rounded-full text-xs font-medium text-center text-sneaky-secondary p-0.5 leading-none"
+                                id="limelightPU"></div>
+                        </div>
+                    </div>
+                    <!-- LEDs -->
+                    <div class="flex items-center">
+                        <div class="w-1/3 text-left text-xs">LEDs</div>
+                        <div class="w-2/3 h-4 bg-sneaky-secondary rounded-full">
+                            <div class="h-4 bg-sneaky rounded-full text-xs font-medium text-center text-sneaky-secondary p-0.5 leading-none"
+                                id="ledsPU"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side -->
+        <div class="w-7/12 ml-6">
+            <!-- Gyro -->
+            <div class="bg-sneaky-background inline-block p-4 text-center">
+                <canvas class="mb-6" id='gyro'></canvas>
+                <div class="text-3xl">
+                    Gyro Angle: <span class="text-sneaky" id="gyroValue">73º</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- <div id="camera"></div>
+
     <article>
-        <!-- Gyroscope -->
-        <svg id="gyro">
-            <circle cx="85" cy="85" r="83"></circle>
-            <circle cx="85" cy="85" r="50"></circle>
-            <rect id="gyro-arm" x="80" y="5" width="10" height="80"></rect>
-            <text id="gyro-number" x="90" y="115">0º</text>
-        </svg>
-        <!-- Example robot diagram, arm moves when encoder value changes -->
+        <canvas id='gyro' />
         <svg id="robot-diagram" width="332" height="450">
             <text x="40" y="340">Example SVG Robot Diagram</text>
             <rect x="75" y="360" width="230" height="40"></rect>
@@ -38,19 +193,15 @@
             <text id="team" x="185" y="405" text-anchor="middle">####</text>
         </svg>
     </article>
-    <!-- The sidebar of the dashboard. Designed for smaller control elements like selection boxes and small buttons. -->
+    
     <aside>
-        <!-- Example button which toggles /SmartDashboard/exampleValue NetworkTables value.
-            The <p> below then says the value. -->
         <div id="example-section">
             <button id="example-button">Change example value</button>
             <p id="example-readout">Value is undefined</p>
         </div>
-        <!-- Autonomous selector -->
         <div class="select-container">
             <select id="auto-select">
                 <option>No auto modes found</option>
-                <!-- This gets populated by JS -->
             </select>
         </div>
         <div>
@@ -61,8 +212,9 @@
     <div id="login">
         <input id="connect-address" type="text" value="localhost" disabled>
         <button id="connect" disabled>Connecting</button>
-    </div>
+    </div> -->
     <script src="networktables/networktables.js"></script>
+    <script src="components/compass.js"></script>
     <script src="ui.js"></script>
     <script src="connection.js"></script>
     <script src="../node_modules/@frc-web-components/frc-web-components/build/frc-web-components.min.js"></script>
