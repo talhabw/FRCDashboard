@@ -1,7 +1,7 @@
 {
-  "name": "FRCDashboard",
-  "version": "2.1.0",
-  "description": "Robot control dashboard boilerplate for FRC.",
+  "name": "sneaky-dashboard",
+  "version": "0.0.1",
+  "description": "7285 Sneaky Sneaks Custom Dashboard",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
@@ -11,14 +11,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FRCDashboard/FRCDashboard"
+    "url": "git+https://github.com/talhabw/Sneaky-Dashboard"
   },
   "author": "Erik Boesen",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/FRCDashboard/FRCDashboard/issues"
-  },
-  "homepage": "http://frcdashboard.github.io",
+  "homepage": "https://talhabw.github.io/Sneaky-Dashboard/",
   "dependencies": {
     "@frc-web-components/frc-web-components": "^1.1.7",
     "wpilib-nt-client": "^1.7.1"
